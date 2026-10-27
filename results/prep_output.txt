@@ -1,0 +1,26 @@
+44 12
+analyte        kind  
+ainuovirine    ss         2
+atazanavir     ss         5
+emtricitabine  multi      2
+lamivudine     ss         4
+taf            single     2
+               ss         5
+tenofovir      multi      2
+               prior      3
+               single     2
+               ss        17
+dtype: int64
+source_pmid
+11557462    4
+15673751    2
+21770762    2
+23392467    3
+25921689    4
+27216057    4
+29309634    2
+31675437    4
+32553717    3
+33252495    5
+33318014    5
+37787861    6

@@ -1,0 +1,72 @@
+=== A. dose extrapolation, PMID 11557462 (leave one dose out) ===
+ dose   GBM  GBM_norm  GBM_norm_nodose  mech_pop  hybrid
+   75 0.367     0.121            0.132     0.110   0.110
+  150 0.280     0.080            0.071     0.074   0.095
+  300 0.058     0.062            0.057     0.081   0.098
+  600 0.181     0.138            0.082     0.106   0.127
+mean
+GBM                0.221
+GBM_norm           0.100
+GBM_norm_nodose    0.085
+mech_pop           0.093
+hybrid             0.107
+
+Same paper, ALL its doses held out (no same-study doses in training):
+ dose   GBM  GBM_norm  GBM_norm_nodose  mech_pop  hybrid
+   75 0.502     0.143            0.135     0.123   0.127
+  150 0.271     0.094            0.071     0.092   0.105
+  300 0.069     0.070            0.067     0.093   0.120
+  600 0.167     0.149            0.073     0.112   0.128
+mean
+GBM                0.252
+GBM_norm           0.114
+GBM_norm_nodose    0.086
+mech_pop           0.105
+hybrid             0.120
+
+=== B. LOPO with / without PMID 33252495 ===
+points per curve by paper (min / median / max / n curves):
+          min  median  max  count
+paper                            
+11557462    8    11.0   11      4
+15673751   11    11.0   11      2
+21770762   11    11.0   11      2
+23392467   12    12.0   12      3
+25921689    9    10.5   12      4
+27216057   10    10.5   12      4
+29309634    6     8.0   10      2
+31675437   10    10.0   10      4
+32553717   12    12.0   12      3
+33252495    5     5.0    5      3
+33318014    8     8.0    8      5
+37787861    7     8.0    8      6
+
+--- (1) all 12 papers, 33252495 in train and test: 42 curves, 12 papers
+analyte_mean    0.443
+GBM             0.313
+GBM_norm        0.251
+mech_pop        0.379
+hybrid          0.343
+  hybrid - GBM: +0.031  95% CI [-0.039, +0.106]  hybrid better in 4/12 papers
+  mech_pop - GBM: +0.066  95% CI [-0.041, +0.174]  mech_pop better in 4/12 papers
+  hybrid - GBM_norm: +0.093  95% CI [+0.011, +0.216]  hybrid better in 3/12 papers
+
+--- (2) 33252495 kept in TRAINING but dropped from the test average: 39 curves, 11 papers
+analyte_mean    0.429
+GBM             0.273
+GBM_norm        0.237
+mech_pop        0.310
+hybrid          0.274
+  hybrid - GBM: +0.001  95% CI [-0.050, +0.046]  hybrid better in 4/11 papers
+  mech_pop - GBM: +0.037  95% CI [-0.060, +0.139]  mech_pop better in 4/11 papers
+  hybrid - GBM_norm: +0.037  95% CI [+0.004, +0.071]  hybrid better in 3/11 papers
+
+--- (3) 33252495 removed from training AND test (11 papers): 39 curves, 11 papers
+analyte_mean    0.435
+GBM             0.329
+GBM_norm        0.256
+mech_pop        0.304
+hybrid          0.250
+  hybrid - GBM: -0.079  95% CI [-0.148, -0.022]  hybrid better in 8/11 papers
+  mech_pop - GBM: -0.025  95% CI [-0.099, +0.058]  mech_pop better in 6/11 papers
+  hybrid - GBM_norm: -0.006  95% CI [-0.042, +0.029]  hybrid better in 5/11 papers
