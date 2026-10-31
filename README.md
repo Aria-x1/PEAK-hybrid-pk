@@ -1,8 +1,8 @@
-# Hybrid mechanistic PK models on AutoPK-extracted curves
+# Hybrid mechanistic PK models on PEAK-extracted curves
 
 Does a mechanistic prior help predict pharmacokinetic (PK) concentration–time curves extracted from the literature, compared with a black-box regressor, when the dataset is small?
 
-This is a feasibility study on curves extracted by **AutoPK** (automated PK extraction from manuscript figures). Negative results are reported as they are.
+This is a feasibility study on curves extracted by **PEAK** (formerly AutoPK; automated PK extraction from manuscript figures). Negative results are reported as they are.
 
 ## Summary
 
@@ -16,7 +16,7 @@ This is a feasibility study on curves extracted by **AutoPK** (automated PK extr
 
 ## Data
 
-- `data/curves_long.csv`: points digitized by AutoPK (one row per point).
+- `data/curves_long.csv`: points digitized by PEAK (one row per point).
 - `data/curve_metadata.csv`: per-curve metadata curated **by hand** by reading the source papers (route, regimen, tau, observed vs simulated, mean vs median, `use_for_training`, confidence, evidence, page). 193 curves from 21 papers; the remaining 5 of the 26 papers in the index are not yet checked.
 
 Main curation finding: many extracted curves are **not observations** (PBPK/popPK simulations, confidence bands, replotted historical controls, animal or tissue curves). A first run that included simulations was retracted.
@@ -106,4 +106,4 @@ pip install -r requirements.txt
 
 ## Next steps
 
-Verify and re-digitize flagged curves; grow the dataset by screening more papers; replace the two-step fit with a hierarchical (mixed-effects) model; add a `data_origin` field (observed / simulated) to the AutoPK index.
+Verify and re-digitize flagged curves; grow the dataset by screening more papers; replace the two-step fit with a hierarchical (mixed-effects) model; add a `data_origin` field (observed / simulated) to the PEAK index.
