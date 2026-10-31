@@ -8,3 +8,4 @@ python lopo.py   > ../results/lopo_output.txt
 python extrap.py > ../results/extrap_output.txt
 python extras.py A B > ../results/extras_AB_output.txt
 python extras.py C > ../results/learning_curve_output.txt
+python extras.py C2 > ../results/learning_curve_output_excl33252495.txt

@@ -1,0 +1,32 @@
+
+=== C. learning curve (train on k random other papers, test on the held-out paper) ===
+  done 11557462
+  done 15673751
+  done 21770762
+  done 23392467
+  done 25921689
+  done 27216057
+  done 29309634
+  done 31675437
+  done 32553717
+  done 33318014
+  done 37787861
+    analyte_mean    GBM  GBM_norm  mech_pop  hybrid
+k                                                  
+2          0.625  0.545     0.477     0.475   0.460
+4          0.574  0.473     0.370     0.417   0.388
+6          0.505  0.400     0.305     0.374   0.314
+8          0.490  0.396     0.292     0.350   0.304
+10         0.435  0.329     0.256     0.304   0.250
+
+hybrid - GBM and mech_pop - GBM by k (paper bootstrap over the test papers):
+  k= 2 hybrid    - GBM: -0.085  [-0.157, -0.025]  better in 9/11 papers
+  k= 2 mech_pop  - GBM: -0.070  [-0.143, +0.010]  better in 9/11 papers
+  k= 4 hybrid    - GBM: -0.085  [-0.160, -0.023]  better in 8/11 papers
+  k= 4 mech_pop  - GBM: -0.056  [-0.163, +0.037]  better in 8/11 papers
+  k= 6 hybrid    - GBM: -0.085  [-0.185, -0.005]  better in 7/11 papers
+  k= 6 mech_pop  - GBM: -0.025  [-0.139, +0.072]  better in 5/11 papers
+  k= 8 hybrid    - GBM: -0.093  [-0.189, -0.015]  better in 8/11 papers
+  k= 8 mech_pop  - GBM: -0.046  [-0.157, +0.055]  better in 7/11 papers
+  k=10 hybrid    - GBM: -0.079  [-0.148, -0.022]  better in 8/11 papers
+  k=10 mech_pop  - GBM: -0.025  [-0.099, +0.058]  better in 6/11 papers
