@@ -74,6 +74,11 @@ def paper_boot(pm_df, a, b, n=2000, seed=0):
 
 allc = list(F.index); papers = sorted(D.paper.unique())
 which = sys.argv[1:] or ['A', 'B', 'C']
+SUF = ''
+if 'C2' in which:   # learning curve with PMID 33252495 removed from training pool AND test set
+    SUF = '_excl33252495'
+    allc = [c for c in allc if F.loc[c, 'source_pmid'] != 33252495]
+    papers = [p for p in papers if p != 33252495]
 
 # ---------------------------------------------------------------- A
 if 'A' in which:
@@ -118,9 +123,9 @@ if 'B' in which:
             print(f'  {a} - {b}: {m:+.3f}  95% CI [{lo:+.3f}, {hi:+.3f}]  {a} better in {nb}/{nt} papers')
 
 # ---------------------------------------------------------------- C
-if 'C' in which:
+if 'C' in which or 'C2' in which:
     print('\n=== C. learning curve (train on k random other papers, test on the held-out paper) ===')
-    ks = [2, 4, 6, 8, 11]; REPS = 10
+    ks = [2, 4, 6, 8, len(papers) - 1]; REPS = 10
     cols = ['analyte_mean', 'GBM', 'GBM_norm', 'mech_pop', 'hybrid']
     rng = np.random.default_rng(123); rows = []
     for p in papers:
@@ -133,15 +138,15 @@ if 'C' in which:
                 tr = [c for c in allc if F.loc[c, 'source_pmid'] in sub]
                 for e in fold(tr, te): e.update(k=k, rep=r, test_paper=p); rows.append(e)
         print('  done', p, flush=True)
-    L = pd.DataFrame(rows); L.to_csv('../results/learning_curve_per_curve.csv', index=False)
+    L = pd.DataFrame(rows); L.to_csv('../results/learning_curve_per_curve'+SUF+'.csv', index=False)
     # per (k, rep): mean over test papers of the paper-mean MAE; then mean/percentiles over reps
     pp = L.groupby(['k', 'rep', 'test_paper'])[cols].mean().reset_index()
     per_rep = pp.groupby(['k', 'rep'])[cols].mean().reset_index()
     summ = per_rep.groupby('k')[cols].agg(['mean', lambda x: x.quantile(.1), lambda x: x.quantile(.9)])
     print(per_rep.groupby('k')[cols].mean().round(3).to_string())
-    per_rep.to_csv('../results/learning_curve_summary.csv', index=False)
+    per_rep.to_csv('../results/learning_curve_summary'+SUF+'.csv', index=False)
     # hybrid - GBM per k with paper-level bootstrap (reps averaged within paper first)
-    print('\nhybrid - GBM and mech_pop - GBM by k (paper bootstrap over the 12 test papers):')
+    print('\nhybrid - GBM and mech_pop - GBM by k (paper bootstrap over the test papers):')
     for k in ks:
         pmx = pp[pp.k == k].groupby('test_paper')[cols].mean()
         for a in ['hybrid', 'mech_pop']:
@@ -159,4 +164,4 @@ if 'C' in which:
     ax.set_xlabel('Number of training papers (k)'); ax.set_ylabel('Paper-level MAE of log10 concentration')
     ax.set_xticks(ks); ax.grid(alpha=.3); ax.legend(frameon=False, fontsize=9)
     ax.set_title('Learning curve, leave-one-paper-out (band: 10th-90th pct over random training subsets)', fontsize=9)
-    fig.tight_layout(); fig.savefig('../results/learning_curve.png', dpi=200)
+    fig.tight_layout(); fig.savefig('../results/learning_curve'+SUF+'.png', dpi=200)

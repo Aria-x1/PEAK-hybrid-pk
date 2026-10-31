@@ -8,7 +8,7 @@ This is a feasibility study on curves extracted by **PEAK** (formerly AutoPK; au
 
 | Question | Result |
 |---|---|
-| Is the data usable? | 204 curves in the index → 193 checked against source papers → 50 usable human oral curves → **42 curves / 12 papers** with ≥4 points for evaluation |
+| Is the data usable? | 204 curves in the index → 193 checked against source papers (21 papers) → 57 kept (16 papers) → 47 oral (14 papers) → 44 human oral (12 papers) → **42 curves / 12 papers** evaluated (≥4 points after cleaning) |
 | Does structure help on unseen papers? | All structured models beat the mean baseline (MAE 0.66) by a wide margin. Hybrid (0.34) and GBM (0.31) are **not distinguishable**: hybrid − GBM = +0.03, 95% bootstrap interval [−0.04, +0.10] |
 | Unseen doses? | Mechanistic models beat the plain GBM in one dose-ranging study (0.09 / 0.11 vs 0.22), **but a GBM that predicts log10(C/dose) matches them (0.10)**: the advantage comes from dose proportionality, not from curve shape. One study, four curves |
 | Is the prior more valuable with less data? | Versus a plain GBM, yes: hybrid is better with 2 and 4 training papers (−0.13, −0.12 MAE, intervals exclude 0) and the gap closes by ~8 papers. But the dose-scaled GBM is as good as or better than every other model at every training size (learning curve below) |
@@ -87,6 +87,20 @@ The paper hurts the hybrid when used as a training label source (noisy fitted pa
 | 8 | 0.41 | 0.31 | 0.41 | 0.37 | −0.04 [−0.10, +0.02] |
 | 11 | 0.31 | 0.25 | 0.38 | 0.34 | +0.03 [−0.04, +0.11] |
 
+Hybrid minus the dose-scaled GBM (paper bootstrap): k=2 +0.01 [−0.02, +0.04]; k=4 +0.04 [−0.02, +0.12]; k=6 +0.07 [+0.01, +0.14]; k=8 +0.06 [+0.01, +0.12]; k=11 +0.09 [+0.01, +0.22]. Mechanistic (drug median) minus the dose-scaled GBM is +0.08 to +0.13 for k ≥ 4 with intervals excluding 0. Only k = 2, 4, 6, 8, 11 were run, so the point where the plain GBM overtakes the hybrid is only known to lie between 8 and 11 papers.
+
+**C′. Learning curve without PMID 33252495** (removed from the training pool and the test set; 11 papers, so k = 2, 4, 6, 8, 10; `results/learning_curve_excl33252495.png`, `results/learning_curve_output_excl33252495.txt`). The exclusion rule was chosen after seeing the full-data results.
+
+| k | GBM | GBM on C/dose | Mechanistic | Hybrid | Hybrid − GBM (95% CI) | Hybrid − GBM on C/dose (95% CI) |
+|---|---|---|---|---|---|---|
+| 2 | 0.55 | 0.48 | 0.48 | 0.46 | −0.09 [−0.16, −0.03] | −0.02 [−0.06, +0.03] |
+| 4 | 0.47 | 0.37 | 0.42 | 0.39 | −0.09 [−0.16, −0.02] | +0.02 [−0.04, +0.08] |
+| 6 | 0.40 | 0.31 | 0.37 | 0.31 | −0.09 [−0.19, −0.01] | +0.01 [−0.03, +0.05] |
+| 8 | 0.40 | 0.29 | 0.35 | 0.30 | −0.09 [−0.19, −0.02] | +0.01 [−0.03, +0.06] |
+| 10 | 0.33 | 0.26 | 0.30 | 0.25 | −0.08 [−0.15, −0.02] | −0.01 [−0.05, +0.03] |
+
+Without that paper the hybrid beats the plain GBM at every training size and is statistically tied with the dose-scaled GBM. The full-data conclusion (hybrid worse than the dose-scaled GBM at larger k) depends on one paper whose 5-point curves give unreliable fitted parameters. Both versions should be reported; neither shows that the compartment shape itself helps beyond dose scaling.
+
 The plain GBM catches up as data grow, as the "priors matter more with little data" idea predicts. But the C/dose GBM is best or tied at every k, so what the data support is "dose scaling matters", not "the compartment shape matters". Note that the dose-scaled GBM was added after seeing the first results, as a control.
 
 ## Limitations
@@ -98,6 +112,8 @@ The plain GBM catches up as data grow, as the "priors matter more with little da
 - Some curves are flagged for re-digitization (e.g. PMID 25959631, 33318014).
 
 ## Reproduce
+
+See `results/INDEX.md` for which script writes which result file.
 
 ```bash
 pip install -r requirements.txt
